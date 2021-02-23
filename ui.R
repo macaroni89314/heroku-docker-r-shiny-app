@@ -1,17 +1,34 @@
-# example from http://shiny.rstudio.com/gallery/kmeans-example.html
+# example from https://www.randpy.tokyo/entry/shiny_8
 
 library(shiny)
 
-shinyUI(
-  pageWithSidebar(
-    headerPanel('Iris k-means clustering'),
-    sidebarPanel(
-      selectInput('xcol', 'X Variable', names(iris)),
-      selectInput('ycol', 'Y Variable', names(iris), selected=names(iris)[[2]]),
-      numericInput('clusters', 'Cluster count', 3, min=1, max=9)
-    ),
-    mainPanel(
-      plotOutput('plot1')
-    )
-  )
-)
+shinyUI(navbarPage("Navbar",
+                   tabPanel("page1",sidebarLayout(
+                     sidebarPanel(
+                       sliderInput("bins",
+                                   "Number of bins:",
+                                   min = 1,
+                                   max = 50,
+                                   value = 30)
+                     ),
+                     mainPanel(
+                       plotOutput("distPlot")
+                     )
+                   )),
+                   tabPanel("page2",
+                            h2("example")),
+                   navbarMenu("example",
+                              tabPanel("name",
+                                       h2("ee")
+                              ),
+                              tabPanel("dd",h2("ff")),
+                              
+                   checkboxGroupInput("variable", "Model:",
+                                                 c("XX" = "mXX",
+                                                   "YY" = "mYY",
+                                                   "X" = "mX",
+                                                   "Y" = "mY",
+                                                   "XY" = "mXY")),
+                      tableOutput("data")            
+                   )
+))
