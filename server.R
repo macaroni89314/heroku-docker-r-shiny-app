@@ -6,10 +6,17 @@ shinyServer(function(input, output) {
   
   output$distPlot <- renderPlot({
     
-    x    <- faithful[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    dat <- read.csv("ccc.csv",header=T,fileEncoding = "UTF-8-BOM")
     
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    result <- lm(formula = V3 ~ V1 + V2 + V1 * V2 + I(V1^2) + I(V2^2), data = dat)
+    
+    V1 = seq(-1,1,by = 0.1)
+    V2 = seq(-1,1,by = 0.1)
+    datf <- expand.grid(xvar = V1, yvar = V2)
+    colnames(datf) <- c("V1","V2")
+    f <- function(V1,V2){predict(result,datf)}
+    V <- outer(V1, V2, f)
+    filled.contour(V1,V2,V, xlab="GFL", ylab = "Blade Speed", col=rainbow(30))
     
   })  
 })

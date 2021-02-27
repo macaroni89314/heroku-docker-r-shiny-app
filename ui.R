@@ -2,15 +2,19 @@
 
 library(shiny)
 
+
+
 shinyUI(navbarPage("Navbar",
                    tabPanel("page1",sidebarLayout(
-                     sidebarPanel(
-                       sliderInput("bins",
-                                   "Number of bins:",
-                                   min = 1,
-                                   max = 50,
-                                   value = 30)
-                     ),
+                     sidebarPanel( h2("Plan"),
+                      checkboxGroupInput("variable", "Select Model:",
+                                          c("XX" = "mXX",
+                                            "YY" = "mYY",
+                                            "X" = "mX",
+                                            "Y" = "mY",
+                                            "XY" = "mXY")
+                       
+                     )),
                      mainPanel(
                        plotOutput("distPlot")
                      )
@@ -22,13 +26,6 @@ shinyUI(navbarPage("Navbar",
                                        h2("ee")
                               ),
                               tabPanel("dd",h2("ff")),
-                              
-                   checkboxGroupInput("variable", "Model:",
-                                                 c("XX" = "mXX",
-                                                   "YY" = "mYY",
-                                                   "X" = "mX",
-                                                   "Y" = "mY",
-                                                   "XY" = "mXY")),
                       tableOutput("data")            
                    )
 ))
