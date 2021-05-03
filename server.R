@@ -3,7 +3,6 @@
 library(shiny)
 library(DT)
 library(rsm)
-library(dplyr)
 
 js <- c(
   "table.on('key', function(e, datatable, key, cell, originalEvent){",
