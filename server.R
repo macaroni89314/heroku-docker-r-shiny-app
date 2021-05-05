@@ -34,29 +34,42 @@ shinyServer(function(input, output) {
   
   dsg <- cube(2,n0=3,randomize=FALSE)
   dsg <-djoin(dsg,star(alpha = "spherical",randomize= FALSE,n0=0))
-  dsg$X1 <- 5*dsg$x1 +85
-  dsg$X2 <- 5*dsg$x2 +175
+  dsg["X1"]<-NA
+  dsg["X2"] <-NA
   dsg["response"]<-NA
-  dsg <- dsg[,c("x1","x2","X1","X2","response")]
+  dsg <-dsg[,c("x1","x2","X1","X2","response")]
+  
+  dsgRecal <- reactive({
+    Data1<- dsg
+    DataNew1 <- Data1
+    Cen1 <- input$center1
+    Cen2 <- input$center2
+    Dis1 <- input$distance1
+    Dis2 <- input$distance2
+    DataNew1$X1 <- Dis1*dsg$x1 +Cen1
+    DataNew1$X2 <- Dis2*dsg$x2 +Cen2
+    return(DataNew1)
+  })
+  
 
   DataRename <- reactive({
-    Data <- dsg
-    DataNew1<-Data
+    Data2 <- dsgRecal()
+    DataNew2<-Data2
     X1 <- input$text1
     X2 <- input$text2
     
     if (X1 == "") {
-      colnames(DataNew1)[3]= "X1"
+      colnames(DataNew2)[3]= "X1"
     }else{
-      colnames(DataNew1)[3]= X1
+      colnames(DataNew2)[3]= X1
     }
     
     if (X2 == "") {
-      colnames(DataNew1)[4]= "X2"
+      colnames(DataNew2)[4]= "X2"
     }else{
-      colnames(DataNew1)[4]= X2
+      colnames(DataNew2)[4]= X2
     }
-    return(DataNew1)
+    return(DataNew2)
   })   
   
   output[["table"]] <- renderDT({

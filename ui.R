@@ -7,10 +7,19 @@ library(rsm)
 
 shinyUI(navbarPage("Navbar",
                    tabPanel("page1",sidebarLayout(
-                     sidebarPanel( 
-                       textInput("text1", label = h3("X1 parameter name"), value = "X1"),
-                       textInput("text2", label = h3("X2 parameter name"), value = "X2"),
-                       
+                     sidebarPanel( fluidRow(
+                       column(4,
+                              textInput("text1", label = h6("X1 parameter name"), value = "X1"),
+                              textInput("text2", label = h6("X2 parameter name"), value = "X2"),
+                       ),
+                       column(4,
+                              numericInput("center1", label=h6("X1 center value"), value = 10),
+                              numericInput("center2", label = h6("X2 center value"), value = 10),
+                       ),
+                       column(4,
+                              numericInput("distance1", label = h6("X1 1 distance"), value = 10),
+                              numericInput("distance2", label = h6("X2 1 distance"), value = 10),
+                       )),
                        h3("Plan"),
                       checkboxGroupInput("variable", "Select Model:",
                                           c("XX" = "I(x1^2)",
