@@ -180,19 +180,22 @@ shinyServer(function(input, output, session) {
     return(formula)
   })
   
+  result <- reactive({
+  dat <-Data2()
+  result <- lm(formula = formula() , data = dat)
+  })
+
   
   output$distPlot <- renderPlot({
     
     if (formula() == "Non"){
       result <- "Non"}
     else if (input$Display == "Model"){
-    dat <-Data2()
-    result <- lm(formula = formula() , data = dat)
     x1 = seq(-1,1,by = 0.1)
     x2 = seq(-1,1,by = 0.1)
     datf <- expand.grid(xvar = x1, yvar = x2)
     colnames(datf) <- c("x1","x2")
-    f <- function(x1,x2){predict(result,datf)}
+    f <- function(x1,x2){predict(result(),datf)}
     V <- outer(x1, x2, f)
     filled.contour(x1,x2,V, xlab= list(input$text1), ylab = list(input$text2),
                    xlim =c(-1,1), ylim=c(-1,1),
@@ -201,13 +204,11 @@ shinyServer(function(input, output, session) {
                    cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
     }
     else if (input$Display == "Actual"){
-      dat <-Data2()
-      result <- lm(formula = formula() , data = dat)
       X1 = seq(input$center1-input$distance1 ,input$center1+input$distance1 ,by = input$center1 /10)
       X2 = seq(input$center2-input$distance2 ,input$center2+input$distance2 ,by = input$center2 /10)
       datf <- expand.grid(xvar = X1, yvar = X2)
       colnames(datf) <- c("X1","X2")
-      f <- function(X1,X2){predict(result,datf)}
+      f <- function(X1,X2){predict(result(),datf)}
       V <- outer(X1, X2, f)
       plot <- filled.contour(X1,X2,V, xlab= list(input$text1), ylab = list(input$text2),
                      xlim =c(input$center1-input$distance1 ,input$center1+input$distance1), 
@@ -217,20 +218,19 @@ shinyServer(function(input, output, session) {
                      cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
     return(plot)
       }
+    
   
-  Summary <- reactive({bindsummary <- summary(result)
-  bindsummary$formula <- formula()
-  return(bindsummary)})
+  
+Summary <- reactive({
+    bindsummary <- summary(result())
+    bindsummary$formula <- formula()
+    return(bindsummary)})
   
   output[["Summary"]]<- renderPrint({Summary()[c(3,4,8,9,12)]})
+    
+    
   
- 
-  
-    })
-
- 
-      
-
+  })
   
   
 })
