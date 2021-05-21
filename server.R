@@ -188,9 +188,7 @@ shinyServer(function(input, output, session) {
   
   output$distPlot <- renderPlot({
     
-    if (formula() == "Non"){
-      result <- "Non"}
-    else if (input$Display == "Model"){
+  if (input$Display == "Model"){
     x1 = seq(-1,1,by = 0.1)
     x2 = seq(-1,1,by = 0.1)
     datf <- expand.grid(xvar = x1, yvar = x2)
@@ -220,7 +218,7 @@ shinyServer(function(input, output, session) {
       }
     
   
-  
+  })
 Summary <- reactive({
     bindsummary <- summary(result())
     bindsummary$formula <- formula()
@@ -230,7 +228,7 @@ Summary <- reactive({
     
     
   
-  })
+  
   
   
 })
