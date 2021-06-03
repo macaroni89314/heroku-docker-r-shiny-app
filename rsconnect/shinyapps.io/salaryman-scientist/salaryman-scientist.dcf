@@ -1,0 +1,13 @@
+name: salaryman-scientist
+title: salaryman-scientist
+username:
+account: salaryman-scientist
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4205372
+bundleId: 4656608
+url: https://salaryman-scientist.shinyapps.io/salaryman-scientist/
+when: 1622369337.66682
+lastSyncTime: 1622369337.66682
+asMultiple: FALSE
+asStatic: FALSE

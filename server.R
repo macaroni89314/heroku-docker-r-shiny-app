@@ -163,7 +163,7 @@ shinyServer(function(input, output, session) {
   formula <- reactive({
     for (i in 1: sum(table(input$variable)))
       if(i==0){
-        formula <- "Non"
+        formula <- ""
       }
       else if(i==1){
         formula <- paste("response ~",input$variable[i])
@@ -187,8 +187,12 @@ shinyServer(function(input, output, session) {
 
   
   output$distPlot <- renderPlot({
+    if (formula()==""){
+      return(NULL)
+    }
+
     
-  if (input$Display == "Model"){
+  else if (input$Display == "Model"){
     x1 = seq(-1,1,by = 0.1)
     x2 = seq(-1,1,by = 0.1)
     datf <- expand.grid(xvar = x1, yvar = x2)
@@ -202,6 +206,9 @@ shinyServer(function(input, output, session) {
                    cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
     }
     else if (input$Display == "Actual"){
+      if(input$distance1 == 0|input$distance2 == 0){
+        return(NULL)
+      }else{
       X1 = seq(input$center1-input$distance1 ,input$center1+input$distance1 ,by = input$center1 /10)
       X2 = seq(input$center2-input$distance2 ,input$center2+input$distance2 ,by = input$center2 /10)
       datf <- expand.grid(xvar = X1, yvar = X2)
@@ -215,14 +222,17 @@ shinyServer(function(input, output, session) {
                      nlevels=100,
                      cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
     return(plot)
-      }
+      }}
     
   
   })
 Summary <- reactive({
+  if (formula()==""){
+    return(NULL)
+  }else{
     bindsummary <- summary(result())
     bindsummary$formula <- formula()
-    return(bindsummary)})
+    return(bindsummary)}})
   
   output[["Summary"]]<- renderPrint({Summary()[c(3,4,8,9,12)]})
     
